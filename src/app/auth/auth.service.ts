@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
-import { throwError, Subject, BehaviorSubject } from 'rxjs';
+import { throwError } from 'rxjs';
 
 import { User } from './user.model';
 import { Router } from '@angular/router';
@@ -101,7 +101,7 @@ export class AuthService {
 
     if (loadedUser.token) {
       //this.user.next(loadedUser);
-      this.store.dispatch(new AuthActions.Login({
+      this.store.dispatch(new AuthActions.AuthenticateSuccess({
         email: loadedUser.emai,
         userId: loadedUser.id,
         token: loadedUser.token,
@@ -122,7 +122,7 @@ export class AuthService {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(email, userId, token, expirationDate);
     //this.user.next(user);
-    this.store.dispatch(new AuthActions.Login({ email: email, userId: userId, token: token, expirationDate: expirationDate }));
+    this.store.dispatch(new AuthActions.AuthenticateSuccess({ email: email, userId: userId, token: token, expirationDate: expirationDate }));
     this.autoLogout(expiresIn * 1000);
     localStorage.setItem('userData', JSON.stringify(user));
   }
