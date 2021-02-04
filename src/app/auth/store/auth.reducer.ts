@@ -1,5 +1,5 @@
-import { User } from "../user.model";
-import * as AuthActions from "./auth.actions";
+import { User } from '../user.model';
+import * as AuthActions from './auth.actions';
 
 export interface State {
   user: User;
@@ -7,17 +7,24 @@ export interface State {
   loading: boolean;
 }
 
-const intialState: State = {
+const initialState: State = {
   user: null,
   authError: null,
   loading: false
 };
 
-export function authReducer(state = intialState, action: AuthActions.AuthActions) {
-  console.log(state);
+export function authReducer(
+  state = initialState,
+  action: AuthActions.AuthActions
+) {
   switch (action.type) {
     case AuthActions.AUTHENTICATE_SUCCESS:
-      const user = new User(action.paylod.email, action.paylod.userId, action.paylod.token, action.paylod.expirationDate);
+      const user = new User(
+        action.paylod.email,
+        action.paylod.userId,
+        action.paylod.token,
+        action.paylod.expirationDate
+      );
       return {
         ...state,
         authError: null,
@@ -30,6 +37,7 @@ export function authReducer(state = intialState, action: AuthActions.AuthActions
         user: null
       };
     case AuthActions.LOGIN_START:
+    case AuthActions.SIGNUP_START:
       return {
         ...state,
         authError: null,
@@ -41,6 +49,11 @@ export function authReducer(state = intialState, action: AuthActions.AuthActions
         user: null,
         authError: action.paylod,
         loading: false
+      };
+    case AuthActions.CLEAR_ERROR:
+      return {
+        ...state,
+        authError: null
       };
     default:
       return state;
